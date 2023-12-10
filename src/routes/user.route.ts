@@ -1,7 +1,8 @@
 import { Router } from 'express';
+import userController from '../controller/user.controller';
 
 const rota = Router();
 
-rota.post('/user', (req, res) => res.send("cadastrou"))
+rota.post('/user', userController.newUser);
 
 export default rota;
