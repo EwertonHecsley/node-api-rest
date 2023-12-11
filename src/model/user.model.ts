@@ -25,10 +25,19 @@ const deleteUser = async (id: number) => {
     await knex('users').where({ id }).del();
 };
 
+const updateUser = async ({ name, email, password }: User, id: number) => {
+    const result = await knex<User>('users')
+        .where({ id })
+        .update({ name, email, password })
+        .returning(['id', 'name', 'email']);
+    return result;
+};
+
 export default {
     newUser,
     findUserEmail,
     findUserId,
     findAllUsers,
-    deleteUser
-}
+    deleteUser,
+    updateUser
+};

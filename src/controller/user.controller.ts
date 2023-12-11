@@ -26,9 +26,17 @@ const deleteUser = async (req: Request, res: Response) => {
     return res.status(204).send();
 };
 
+const updateUser = async (req: Request, res: Response) => {
+    const { name, password, email } = req.body;
+    const { id } = req.params;
+    const result = await userService.updateUser({ name, email, password }, id);
+    return res.status(200).json(result);
+};
+
 export default {
     newUser,
     findUserId,
     findAllUsers,
-    deleteUser
+    deleteUser,
+    updateUser
 };

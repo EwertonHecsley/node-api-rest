@@ -41,9 +41,23 @@ const deleteUser = async (id: string) => {
     const user_id_number = parseInt(id);
     const result = await userModel.findUserId(user_id_number);
 
-    if (!result) throw new HttpException(404, 'Usuário não encontrado.');
+    if (!result) throw new HttpException(404, 'Usuário não encontrado para esse ID.');
 
     await userModel.deleteUser(user_id_number);
+};
+
+const updateUser = async ({ name, email, password }: User, id: string) => {
+    const user_id_number = parseInt(id)
+
+    const user = await userModel.findUserId(user_id_number);
+    if (!user) throw new HttpException(404, 'Usuário não encontrado para esse ID.');
+
+    const userEmail = await userModel.findUserEmail(email);
+    if (userEmail) throw new HttpException(400, 'Email já cadastrado.');
+
+    const hashPassword = await bcrypt.hash(password, 8);
+    const result = await userModel.updateUser({ name, email, password: hashPassword }, user_id_number);
+    return result;
 };
 
 
@@ -51,5 +65,6 @@ export default {
     newUser,
     findUserId,
     findAllUsers,
-    deleteUser
+    deleteUser,
+    updateUser
 }
