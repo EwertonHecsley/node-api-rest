@@ -6,7 +6,12 @@ const newUser = async (user: User) => {
     return result
 };
 
+const findUserEmail = async (email: string) => {
+    const result = await knex<User>('users').where({ email }).first();
+    return result;
+};
 
 export default {
-    newUser
+    newUser,
+    findUserEmail
 }
