@@ -13,9 +13,15 @@ const findUserId = async (req: Request, res: Response) => {
 
     const user = await userService.findUserId(id);
     return res.status(200).json(user);
-}
+};
+
+const findAllUsers = async (_req: Request, res: Response) => {
+    const users = await userService.findAllUsers();
+    return res.status(200).json(users);
+};
 
 export default {
     newUser,
-    findUserId
+    findUserId,
+    findAllUsers
 };

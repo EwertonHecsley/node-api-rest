@@ -2,6 +2,7 @@ import { HttpException } from '../middleware/HttpException';
 import userModel from '../model/user.model';
 import bcrypt from 'bcrypt';
 import { format } from 'date-fns'
+import { User } from '../utils/interfaces';
 
 const newUser = async (name: string, email: string, password: string) => {
     const user = await userModel.findUserEmail(email);
@@ -25,7 +26,19 @@ const findUserId = async (id: string) => {
     return resultFormated;
 };
 
+const findAllUsers = async (): Promise<User[]> => {
+    const result = await userModel.findAllUsers();
+
+    const resultFormated = result.map((element) => {
+        element.createdat instanceof Date && (element.createdat = format(element.createdat, 'dd/MM/yyyy'));
+        const { password: _, ...elementFomated } = element;
+        return elementFomated as User;
+    });
+    return resultFormated;
+};
+
 export default {
     newUser,
-    findUserId
+    findUserId,
+    findAllUsers
 }

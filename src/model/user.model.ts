@@ -16,8 +16,14 @@ const findUserId = async (id: number) => {
     return result;
 };
 
+const findAllUsers = async (): Promise<User[]> => {
+    const result = await knex<User>('users');
+    return result;
+};
+
 export default {
     newUser,
     findUserEmail,
-    findUserId
+    findUserId,
+    findAllUsers
 }
