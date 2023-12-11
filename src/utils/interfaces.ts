@@ -4,4 +4,10 @@ export interface User {
     name: string
     email: string
     password: string
+};
+
+export interface JoiRequestBody {
+    name: string
+    email: string
+    password: string
 }
