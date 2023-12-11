@@ -11,7 +11,13 @@ const findUserEmail = async (email: string) => {
     return result;
 };
 
+const findUserId = async (id: number) => {
+    const result = await knex<User>('users').where({ id }).first();
+    return result;
+};
+
 export default {
     newUser,
-    findUserEmail
+    findUserEmail,
+    findUserId
 }

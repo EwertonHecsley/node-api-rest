@@ -8,6 +8,14 @@ const newUser = async (req: Request, res: Response) => {
     return res.status(201).json({ mensagem: 'Usuario cadastrado com sucesso.', usuario: user });
 };
 
+const findUserId = async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const user = await userService.findUserId(id);
+    return res.status(200).json(user);
+}
+
 export default {
-    newUser
+    newUser,
+    findUserId
 };
