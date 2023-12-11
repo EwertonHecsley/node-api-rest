@@ -14,8 +14,8 @@ const newUser = async (name: string, email: string, password: string) => {
 };
 
 const findUserId = async (id: string) => {
-    const usuario_id = parseInt(id);
-    const result = await userModel.findUserId(usuario_id);
+    const user_id_number = parseInt(id);
+    const result = await userModel.findUserId(user_id_number);
 
     if (!result) throw new HttpException(404, 'Usuário não encontrado.');
 
@@ -37,8 +37,19 @@ const findAllUsers = async (): Promise<User[]> => {
     return resultFormated;
 };
 
+const deleteUser = async (id: string) => {
+    const user_id_number = parseInt(id);
+    const result = await userModel.findUserId(user_id_number);
+
+    if (!result) throw new HttpException(404, 'Usuário não encontrado.');
+
+    await userModel.deleteUser(user_id_number);
+};
+
+
 export default {
     newUser,
     findUserId,
-    findAllUsers
+    findAllUsers,
+    deleteUser
 }

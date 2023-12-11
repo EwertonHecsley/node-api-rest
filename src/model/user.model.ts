@@ -21,9 +21,14 @@ const findAllUsers = async (): Promise<User[]> => {
     return result;
 };
 
+const deleteUser = async (id: number) => {
+    await knex('users').where({ id }).del();
+};
+
 export default {
     newUser,
     findUserEmail,
     findUserId,
-    findAllUsers
+    findAllUsers,
+    deleteUser
 }

@@ -20,8 +20,15 @@ const findAllUsers = async (_req: Request, res: Response) => {
     return res.status(200).json(users);
 };
 
+const deleteUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    await userService.deleteUser(id);
+    return res.status(204).send();
+};
+
 export default {
     newUser,
     findUserId,
-    findAllUsers
+    findAllUsers,
+    deleteUser
 };

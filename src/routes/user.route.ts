@@ -7,6 +7,7 @@ const rota = Router();
 
 rota.post('/user', validateBody(userSchema), userController.newUser);
 rota.get('/user/:id', userController.findUserId);
+rota.delete('/user/:id', userController.deleteUser);
 rota.get('/user', userController.findAllUsers);
 
 export default rota;
