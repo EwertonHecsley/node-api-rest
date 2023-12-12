@@ -32,7 +32,16 @@ const loginShema = joi.object({
     })
 });
 
+const emailSchema = joi.object({
+    email: joi.string().email().required().messages({
+        'any.required': 'Campo email obrigatório.',
+        'string.base': 'Somente texto.',
+        'string.email': 'Formato de email inválido.'
+    })
+})
+
 export default {
     userSchema,
-    loginShema
+    loginShema,
+    emailSchema
 }
