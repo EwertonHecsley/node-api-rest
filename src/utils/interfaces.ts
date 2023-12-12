@@ -1,3 +1,5 @@
+import { Request } from "express"
+
 export interface User {
     id?: number
     createdat?: Date | string
@@ -10,4 +12,4 @@ export interface JoiRequestBody {
     name: string
     email: string
     password: string
-}
+};

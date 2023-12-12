@@ -5,6 +5,8 @@ import { userSchema } from '../schema/user.schema';
 
 const rota = Router();
 
+rota.post('/login', userController.loginUser);
+
 rota.post('/user', validateBody(userSchema), userController.newUser);
 rota.get('/user/:id', userController.findUserId);
 rota.delete('/user/:id', userController.deleteUser);

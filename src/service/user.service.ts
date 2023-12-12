@@ -3,6 +3,8 @@ import userModel from '../model/user.model';
 import bcrypt from 'bcrypt';
 import { format } from 'date-fns'
 import { User } from '../utils/interfaces';
+import jwt, { Secret } from 'jsonwebtoken';
+import 'dotenv/config';
 
 const newUser = async (name: string, email: string, password: string) => {
     const user = await userModel.findUserEmail(email);
@@ -48,16 +50,31 @@ const deleteUser = async (id: string) => {
 
 const updateUser = async ({ name, email, password }: User, id: string) => {
     const user_id_number = parseInt(id)
-
     const user = await userModel.findUserId(user_id_number);
+
     if (!user) throw new HttpException(404, 'Usuário não encontrado para esse ID.');
 
     const userEmail = await userModel.findUserEmail(email);
+
     if (userEmail) throw new HttpException(400, 'Email já cadastrado.');
 
     const hashPassword = await bcrypt.hash(password, 8);
     const result = await userModel.updateUser({ name, email, password: hashPassword }, user_id_number);
     return result;
+};
+
+const loginUser = async (email: string, password: string) => {
+    const result = await userModel.findUserEmail(email) as User;
+
+    if (!result) throw new HttpException(401, 'Email inválido.');
+
+    const verifyPassword = await bcrypt.compare(password, result?.password);
+
+    if (!verifyPassword) throw new HttpException(401, 'Senha inválida.');
+
+    const token = await jwt.sign({ id: result.id }, process.env.JWT_KEY as Secret);
+    const { password: _, createdat: __, ...resultFormated } = result;
+    return { mensagem: 'Usuário logado com sucesso.', usuario: resultFormated, token };
 };
 
 
@@ -66,5 +83,6 @@ export default {
     findUserId,
     findAllUsers,
     deleteUser,
-    updateUser
+    updateUser,
+    loginUser
 }

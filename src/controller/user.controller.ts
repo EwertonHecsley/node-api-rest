@@ -33,10 +33,17 @@ const updateUser = async (req: Request, res: Response) => {
     return res.status(200).json(result);
 };
 
+const loginUser = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+    const result = await userService.loginUser(email, password);
+    return res.status(200).json(result);
+};
+
 export default {
     newUser,
     findUserId,
     findAllUsers,
     deleteUser,
-    updateUser
+    updateUser,
+    loginUser
 };
