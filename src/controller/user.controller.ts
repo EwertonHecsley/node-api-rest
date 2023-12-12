@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import userService from "../service/user.service";
+import { User } from "../utils/interfaces";
 
 const newUser = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
@@ -15,8 +16,17 @@ const findUserId = async (req: Request, res: Response) => {
     return res.status(200).json(user);
 };
 
-const findAllUsers = async (_req: Request, res: Response) => {
-    const users = await userService.findAllUsers();
+const findAllUsers = async (req: Request, res: Response) => {
+    let users: User[] = [];
+
+    if (req.query) {
+        const { name } = req.query;
+        if (typeof name === 'string') users = await userService.findAllUsers(name);
+
+        return res.status(200).json(users);
+    }
+
+    users = await userService.findAllUsers();
     return res.status(200).json(users);
 };
 

@@ -28,14 +28,17 @@ const findUserId = async (id: string) => {
     return resultFormated;
 };
 
-const findAllUsers = async (): Promise<User[]> => {
-    const result = await userModel.findAllUsers();
+const findAllUsers = async (filter?: string): Promise<User[]> => {
+    let result: User[] = await userModel.findAllUsers();
+
+    if (filter) result = result.filter((element) => element.name.toLowerCase().includes(filter.toLowerCase()));
 
     const resultFormated = result.map((element) => {
         element.createdat instanceof Date && (element.createdat = format(element.createdat, 'dd/MM/yyyy'));
         const { password: _, ...elementFomated } = element;
         return elementFomated as User;
     });
+
     return resultFormated;
 };
 
