@@ -5,6 +5,8 @@ import { format } from 'date-fns'
 import { User } from '../utils/interfaces';
 import jwt, { Secret } from 'jsonwebtoken';
 import 'dotenv/config';
+import { generateAleatoryPassword } from '../utils/extra.functions';
+import { sendEmaail } from '../utils/send.email';
 
 const newUser = async (name: string, email: string, password: string) => {
     const user = await userModel.findUserEmail(email);
@@ -80,6 +82,23 @@ const loginUser = async (email: string, password: string) => {
     return { mensagem: 'Usuário logado com sucesso.', usuario: resultFormated, token };
 };
 
+const userRecoveryPassword = async (emailUser: string) => {
+    const result = await userModel.findUserEmail(emailUser);
+
+    if (!result) throw new HttpException(404, 'Email não encontrado.');
+
+    const { id, name, email } = result;
+
+    if (typeof id === 'number') {
+        const newPassword = await generateAleatoryPassword();
+        result.password = newPassword;
+        await sendEmaail(name, email, result.password);
+        const hashNewPassword = await bcrypt.hash(result.password, 8);
+        await userModel.updateGeneric('password', hashNewPassword, id);
+    };
+
+};
+
 
 export default {
     newUser,
@@ -87,5 +106,6 @@ export default {
     findAllUsers,
     deleteUser,
     updateUser,
-    loginUser
+    loginUser,
+    userRecoveryPassword
 }

@@ -7,7 +7,7 @@ import { authMiddleware } from '../middleware/authMiddleware';
 const rota = Router();
 
 rota.post('/login', validateBody(shema.loginShema), userController.loginUser);
-
+rota.post('/user/password', userController.userRecoveryPassword);
 rota.post('/user', validateBody(shema.userSchema), userController.newUser);
 
 rota.use(authMiddleware);

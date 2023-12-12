@@ -49,11 +49,18 @@ const loginUser = async (req: Request, res: Response) => {
     return res.status(200).json(result);
 };
 
+const userRecoveryPassword = async (req: Request, res: Response) => {
+    const { email } = req.body;
+    await userService.userRecoveryPassword(email);
+    return res.status(200).json({ mensagem: 'Nova senha enviada ao email cadastrado.' });
+};
+
 export default {
     newUser,
     findUserId,
     findAllUsers,
     deleteUser,
     updateUser,
-    loginUser
+    loginUser,
+    userRecoveryPassword
 };

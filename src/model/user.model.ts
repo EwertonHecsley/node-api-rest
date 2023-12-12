@@ -33,11 +33,17 @@ const updateUser = async ({ name, email, password }: User, id: number) => {
     return result;
 };
 
+const updateGeneric = async (keyName: string, value: any, id: number) => {
+    const updateKey = { [keyName]: value };
+    await knex('users').where({ id }).update(updateKey);
+};
+
 export default {
     newUser,
     findUserEmail,
     findUserId,
     findAllUsers,
     deleteUser,
-    updateUser
+    updateUser,
+    updateGeneric
 };
