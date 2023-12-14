@@ -5,19 +5,9 @@ import userModel from "../../model/user.model";
 import jwt from "jsonwebtoken";
 import { HttpException } from "../../middleware/HttpException";
 import { User } from "../../utils/interfaces";
-import { afterEach, beforeEach } from "mocha";
+import { afterEach } from "mocha";
 
 describe('Testando a camada service de login de usuários', () => {
-    let usuario: User;
-
-    beforeEach(() => {
-        usuario = {
-            id: 1,
-            name: 'nome teste',
-            email: 'email@teste',
-            password: 'senha-qualquer', // Adicionando uma senha para o tipo User
-        };
-    });
 
     afterEach(() => {
         Sinon.restore();
@@ -27,7 +17,7 @@ describe('Testando a camada service de login de usuários', () => {
         Sinon.stub(userModel, 'findUserEmail').resolves(undefined);
         Sinon.stub(userService, 'loginUser').rejects(new HttpException(401, 'Email inválido.'));
 
-        const email = 'email inválido';
+        const email = 'email@inválido.com';
         const password = '123';
 
         try {
@@ -39,6 +29,13 @@ describe('Testando a camada service de login de usuários', () => {
     });
 
     it('Quando a senha é inválida', async () => {
+        const usuario = {
+            id: 1,
+            name: 'nome teste',
+            email: 'email@teste',
+            password: 'senha-qualquer'
+        } as User
+
         Sinon.stub(userModel, 'findUserEmail').resolves(usuario);
         Sinon.stub(userService, 'loginUser').rejects(new HttpException(401, 'Senha inválida.'));
 
@@ -54,6 +51,13 @@ describe('Testando a camada service de login de usuários', () => {
     });
 
     it('Quando email e usuário são válidos', async () => {
+        const usuario = {
+            id: 1,
+            name: 'nome teste',
+            email: 'email@teste',
+            password: 'senha-qualquer'
+        } as User
+
         Sinon.stub(userModel, 'findUserEmail').resolves(usuario);
         Sinon.stub(jwt, 'sign').callsFake(async () => 'token-qualquer');
         Sinon.stub(userService, 'loginUser').resolves({ mensagem: 'Usuário logado com sucesso.', usuario, token: 'token-qualquer' });
