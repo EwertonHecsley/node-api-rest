@@ -77,7 +77,7 @@ const loginUser = async (email: string, password: string) => {
 
     if (!verifyPassword) throw new HttpException(401, 'Senha inválida.');
 
-    const token = await jwt.sign({ id: result.id }, process.env.JWT_KEY as Secret) as string;
+    const token = await jwt.sign({ id: result.id }, process.env.JWT_KEY as Secret);
     const { password: _, createdat: __, ...resultFormated } = result;
     return { mensagem: 'Usuário logado com sucesso.', usuario: resultFormated, token };
 };
